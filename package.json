@@ -1,0 +1,36 @@
+{
+  "name": "advanced-rc-column-designer-pro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node --test",
+    "validate": "node scripts/validate.js",
+    "serve": "node server.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MFSRocky/ADVANCED-RC-COLUMN-DESIGNER-PRO.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MFSRocky/ADVANCED-RC-COLUMN-DESIGNER-PRO/issues"
+  },
+  "homepage": "https://github.com/MFSRocky/ADVANCED-RC-COLUMN-DESIGNER-PRO#readme",
+  "dependencies": {
+    "@fontsource-variable/inter": "5.2.6",
+    "@fontsource/ibm-plex-mono": "5.2.6",
+    "jspdf": "4.2.1",
+    "lucide-static": "0.468.0"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1"
+  },
+  "type": "module"
+}

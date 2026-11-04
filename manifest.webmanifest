@@ -1,0 +1,11 @@
+{
+  "name": "RC Column Designer Pro",
+  "short_name": "RC Column Pro",
+  "description": "Offline RC column design to ACI 318-25 and BS 8110-1:1997",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#0b5cad",
+  "icons": [{ "src": "assets/icons/app-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

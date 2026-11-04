@@ -1,0 +1,324 @@
+{
+  "id": "da7a7732-e77c-4341-9778-40fc8d616fe8",
+  "schemaVersion": 1,
+  "name": "Sample Office Building — RC Columns",
+  "client": "Sample Client",
+  "projectNumber": "RC-2026-001",
+  "engineer": "Design Engineer",
+  "code": "ACI318-25",
+  "units": {
+    "length": "mm",
+    "force": "kN",
+    "moment": "kN·m",
+    "stress": "MPa",
+    "area": "mm²"
+  },
+  "settings": {
+    "exposure": "interior",
+    "aggregateSize": 20,
+    "theme": "system"
+  },
+  "columns": [
+    {
+      "id": "4719f07d-f71e-4b3b-8a93-78fedd8b0fe9",
+      "mark": "C1",
+      "floor": "Ground",
+      "grid": "A/1",
+      "zone": "",
+      "input": {
+        "code": "ACI318-25",
+        "geometry": {
+          "shape": "rect",
+          "b": 400,
+          "h": 600
+        },
+        "cover": 40,
+        "concrete": {
+          "fc": 30
+        },
+        "steel": {
+          "fy": 420
+        },
+        "tieSteel": {
+          "fy": 420
+        },
+        "arrangement": {
+          "barDb": 25,
+          "nx": 3,
+          "ny": 4
+        },
+        "transverse": {
+          "type": "ties",
+          "db": 10,
+          "spacing": 150
+        },
+        "height": {
+          "clear": 3500,
+          "braced": true,
+          "kx": 1,
+          "ky": 1,
+          "endTopX": "1",
+          "endBottomX": "1",
+          "endTopY": "1",
+          "endBottomY": "1"
+        },
+        "loads": [
+          {
+            "id": "ULS1",
+            "name": "1.2D + 1.6L",
+            "Pu": 2500000,
+            "Mx": 150000000,
+            "My": 80000000,
+            "M1x": 75000000,
+            "M2x": 150000000,
+            "M1y": 40000000,
+            "M2y": 80000000,
+            "Vx": 40000,
+            "Vy": 25000,
+            "betaDns": 0.5
+          }
+        ],
+        "exposure": "interior",
+        "aggregateSize": 20
+      }
+    },
+    {
+      "id": "da348030-759b-4e40-a370-c8349168ac7e",
+      "mark": "C2",
+      "floor": "Ground",
+      "grid": "A/1",
+      "zone": "",
+      "input": {
+        "code": "ACI318-25",
+        "geometry": {
+          "shape": "rect",
+          "b": 350,
+          "h": 350
+        },
+        "cover": 40,
+        "concrete": {
+          "fc": 30
+        },
+        "steel": {
+          "fy": 420
+        },
+        "tieSteel": {
+          "fy": 420
+        },
+        "arrangement": {
+          "barDb": 20,
+          "nx": 3,
+          "ny": 3
+        },
+        "transverse": {
+          "type": "ties",
+          "db": 10,
+          "spacing": 150
+        },
+        "height": {
+          "clear": 3500,
+          "braced": true,
+          "kx": 1,
+          "ky": 1,
+          "endTopX": "1",
+          "endBottomX": "1",
+          "endTopY": "1",
+          "endBottomY": "1"
+        },
+        "loads": [
+          {
+            "name": "ULS",
+            "Pu": 1400000,
+            "Mx": 60000000,
+            "My": 60000000,
+            "M1x": 30000000,
+            "M2x": 60000000,
+            "M1y": 30000000,
+            "M2y": 60000000,
+            "Vx": 20000,
+            "Vy": 20000
+          }
+        ],
+        "exposure": "interior",
+        "aggregateSize": 20
+      }
+    },
+    {
+      "id": "43f06705-7ed2-40df-8222-4398717c3f07",
+      "mark": "C3",
+      "floor": "Ground",
+      "grid": "A/1",
+      "zone": "",
+      "input": {
+        "code": "BS8110-1997",
+        "geometry": {
+          "shape": "rect",
+          "b": 400,
+          "h": 500
+        },
+        "cover": 30,
+        "concrete": {
+          "fcu": 35
+        },
+        "steel": {
+          "fy": 460
+        },
+        "tieSteel": {
+          "fy": 460
+        },
+        "arrangement": {
+          "barDb": 25,
+          "nx": 3,
+          "ny": 3
+        },
+        "transverse": {
+          "type": "ties",
+          "db": 8,
+          "spacing": 150
+        },
+        "height": {
+          "clear": 3500,
+          "braced": true,
+          "kx": 1,
+          "ky": 1,
+          "endTopX": "1",
+          "endBottomX": "1",
+          "endTopY": "1",
+          "endBottomY": "1"
+        },
+        "loads": [
+          {
+            "name": "1.4D+1.6L",
+            "Pu": 2200000,
+            "Mx": 120000000,
+            "My": 70000000,
+            "M1x": 60000000,
+            "M2x": 120000000,
+            "M1y": 35000000,
+            "M2y": 70000000,
+            "Vx": 35000,
+            "Vy": 25000
+          }
+        ],
+        "exposure": "moderate",
+        "aggregateSize": 20
+      }
+    },
+    {
+      "id": "82de5f1b-edb9-4cdb-956b-f91d244ea54b",
+      "mark": "C4",
+      "floor": "Ground",
+      "grid": "A/1",
+      "zone": "",
+      "input": {
+        "code": "ACI318-25",
+        "geometry": {
+          "shape": "circle",
+          "D": 500
+        },
+        "cover": 40,
+        "concrete": {
+          "fc": 30
+        },
+        "steel": {
+          "fy": 420
+        },
+        "tieSteel": {
+          "fy": 420
+        },
+        "arrangement": {
+          "barDb": 20,
+          "n": 8
+        },
+        "transverse": {
+          "type": "spiral",
+          "db": 10,
+          "spacing": 50
+        },
+        "height": {
+          "clear": 3500,
+          "braced": true,
+          "kx": 1,
+          "ky": 1,
+          "endTopX": "1",
+          "endBottomX": "1",
+          "endTopY": "1",
+          "endBottomY": "1"
+        },
+        "loads": [
+          {
+            "name": "ULS",
+            "Pu": 1800000,
+            "Mx": 90000000,
+            "My": 40000000,
+            "M1x": 45000000,
+            "M2x": 90000000,
+            "M1y": 20000000,
+            "M2y": 40000000
+          }
+        ],
+        "exposure": "interior",
+        "aggregateSize": 20
+      }
+    }
+  ],
+  "combinations": [
+    {
+      "id": "ACI1",
+      "name": "1.4D",
+      "factors": {
+        "D": 1.4,
+        "L": 0,
+        "W": 0,
+        "E": 0
+      },
+      "clause": "ASCE 7 §2.3.1 (ACI §5.3)"
+    },
+    {
+      "id": "ACI2",
+      "name": "1.2D + 1.6L",
+      "factors": {
+        "D": 1.2,
+        "L": 1.6,
+        "W": 0,
+        "E": 0
+      },
+      "clause": "ASCE 7 §2.3.1 (ACI §5.3)"
+    },
+    {
+      "id": "ACI3",
+      "name": "1.2D + 1.0W + 1.0L",
+      "factors": {
+        "D": 1.2,
+        "L": 1,
+        "W": 1,
+        "E": 0
+      },
+      "clause": "ASCE 7 §2.3.1 (ACI §5.3)"
+    },
+    {
+      "id": "ACI4",
+      "name": "0.9D + 1.0W",
+      "factors": {
+        "D": 0.9,
+        "L": 0,
+        "W": 1,
+        "E": 0
+      },
+      "clause": "ASCE 7 §2.3.1 (ACI §5.3)"
+    },
+    {
+      "id": "ACI5",
+      "name": "1.2D + 1.0E + 1.0L",
+      "factors": {
+        "D": 1.2,
+        "L": 1,
+        "W": 0,
+        "E": 1
+      },
+      "clause": "ASCE 7 §2.3.1 (ACI §5.3)"
+    }
+  ],
+  "createdAt": "2026-11-04T11:37:09.742Z",
+  "updatedAt": "2026-11-04T11:37:09.742Z"
+}
