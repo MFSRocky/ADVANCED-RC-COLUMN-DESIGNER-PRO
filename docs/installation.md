@@ -20,7 +20,13 @@ not `file://`.
 ```bash
 npm test           # node:test engineering regression suite
 npm run validate   # human-readable benchmark report
+npm run serve      # in another terminal, if not already running
+npm run test:ui    # headless Chromium presentation/boot/fallback smoke test
 ```
+
+The UI smoke test uses `@sparticuz/chromium` + `puppeteer-core` and writes screenshots to
+`test-results/` (gitignored). It checks desktop layout, design/analysis rendering, mobile overflow,
+critical-CSS fallback when the external stylesheet is blocked, and boot when IndexedDB is blocked.
 
 ## Offline / PWA
 
