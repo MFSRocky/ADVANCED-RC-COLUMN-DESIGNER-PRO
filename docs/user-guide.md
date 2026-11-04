@@ -38,3 +38,12 @@ drawing or report feature calls the network.
 
 The sidebar collapses to a menu button. Layouts use safe-area insets and avoid horizontal overflow.
 Charts resize with the viewport.
+
+## Troubleshooting presentation
+
+- If the page looks unstyled or blank, hard-refresh (Ctrl/Cmd+Shift+R). The app ships critical inline
+  CSS and a boot watchdog so the shell remains usable even if the external stylesheet or storage is delayed.
+- If IndexedDB is blocked by the browser, the app boots in **Local backup mode** and shows a badge;
+  projects are kept in LocalStorage/memory instead of failing silently.
+- The service worker uses a versioned cache and network-first navigation so deployed fixes are not hidden
+  by an old cached shell.

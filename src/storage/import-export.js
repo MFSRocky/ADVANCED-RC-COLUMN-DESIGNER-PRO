@@ -1,4 +1,5 @@
 /** JSON / CSV import-export with validation. */
+import { newId } from '../core/id.js';
 import { ValidationError } from '../core/validation.js';
 
 export function exportJSON(project) { return JSON.stringify(project, null, 2); }
@@ -9,7 +10,7 @@ export function importJSON(text) {
   if (!p || typeof p !== 'object') throw new ValidationError('Project must be a JSON object.');
   if (!p.name) throw new ValidationError('Project is missing a name.');
   if (!Array.isArray(p.columns)) throw new ValidationError('Project is missing a columns array.');
-  p.id = p.id ?? crypto.randomUUID();
+  p.id = p.id ?? newId();
   p.schemaVersion = p.schemaVersion ?? 1;
   return p;
 }
@@ -83,7 +84,7 @@ export function csvToColumns(text, defaultCode = 'ACI318-25') {
       height: { clear: num('clearHeight', 3500), braced: r.braced !== '0', lex: num('lex', undefined), ley: num('ley', undefined) },
       loads: [{ name: 'CSV-ULS', Pu: num('Pu', 1000e3), Mx: num('Mx', 0), My: num('My', 0), Vx: num('Vx', 0), Vy: num('Vy', 0) }],
     };
-    return { id: crypto.randomUUID(), mark: r.mark || `C${idx + 1}`, floor: r.floor || '', grid: r.grid || '', zone: r.zone || '', input };
+    return { id: newId(), mark: r.mark || `C${idx + 1}`, floor: r.floor || '', grid: r.grid || '', zone: r.zone || '', input };
   });
 }
 

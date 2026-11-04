@@ -5,9 +5,10 @@ export function drawUniaxial(canvas, diagram, loads = []) {
   const rows = diagram.rows ?? [];
   if (!rows.length) return;
   const pad = { l: 64, r: 20, t: 20, b: 44 };
-  const maxM = Math.max(1, ...rows.map(r => Math.abs(r.Mxd ?? r.Md ?? 0)), ...loads.map(l => Math.abs(l.M ?? 0))) * 1.1;
-  const maxP = Math.max(1, ...rows.map(r => r.Pd ?? r.Pn ?? 0), ...loads.map(l => l.P ?? 0)) * 1.1;
-  const minP = Math.min(0, ...rows.map(r => r.Pd ?? r.Pn ?? 0)) * 1.1;
+  // Diagram rows are in N / N·mm; plot axes are labelled in kN / kN·m.
+  const maxM = Math.max(1, ...rows.map(r => Math.abs(r.Mxd ?? r.Md ?? 0) / 1e6), ...loads.map(l => Math.abs(l.M ?? 0) / 1e6)) * 1.1;
+  const maxP = Math.max(1, ...rows.map(r => (r.Pd ?? r.Pn ?? 0) / 1000), ...loads.map(l => (l.P ?? 0) / 1000)) * 1.1;
+  const minP = Math.min(0, ...rows.map(r => (r.Pd ?? r.Pn ?? 0) / 1000), ...loads.map(l => (l.P ?? 0) / 1000)) * 1.1;
   const X = m => pad.l + (m / maxM) * (W - pad.l - pad.r);
   const Y = p => H - pad.b - ((p - minP) / (maxP - minP)) * (H - pad.t - pad.b);
   grid(ctx, W, H, pad, maxM, maxP, minP, 'M (kN·m)', 'P (kN)');

@@ -29,6 +29,7 @@ npm install          # installs jsPDF, Lucide icons, fonts, Playwright (dev)
 npm run serve        # static server on http://0.0.0.0:8080
 npm test             # engineering regression tests
 npm run validate     # benchmark report
+npm run test:ui      # headless browser presentation/boot smoke test (server must be running)
 ```
 
 Open `http://localhost:8080` (or the Arena live preview). All calculation, drawing, storage and

@@ -1,6 +1,7 @@
+import { newId } from '../core/id.js';
 export function createDefaultProject() {
   return {
-    id: crypto.randomUUID(),
+    id: newId(),
     schemaVersion: 1,
     name: 'New Project',
     client: '', projectNumber: '', engineer: '',
@@ -17,7 +18,7 @@ export function createDefaultProject() {
 export function createColumn(mark = 'C1', code = 'ACI318-25', overrides = {}) {
   const isBS = code.startsWith('BS');
   return {
-    id: crypto.randomUUID(), mark, floor: 'Ground', grid: 'A/1', zone: '',
+    id: newId(), mark, floor: 'Ground', grid: 'A/1', zone: '',
     input: {
       code,
       geometry: { shape: 'rect', b: 400, h: 600 },

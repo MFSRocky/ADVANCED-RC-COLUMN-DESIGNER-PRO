@@ -6,33 +6,63 @@
 <meta name="theme-color" content="#0b5cad">
 <meta name="description" content="Offline RC column design to ACI 318-25 and BS 8110-1:1997">
 <title>RC Column Designer Pro</title>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="assets/icons/app-icon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="src/ui/styles.css">
-<script src="vendor/jspdf.umd.min.js"></script>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./assets/icons/app-icon.svg" type="image/svg+xml">
+<style id="critical-css">
+/* Critical shell styles: keep the app usable even if the external stylesheet is delayed or blocked. */
+:root{--bg:#f5f7fa;--surface:#fff;--surface-2:#eef2f6;--text:#16202a;--muted:#5b6b7b;--border:#d7dee6;--primary:#0b5cad;--primary-2:#084a8c;--pass:#137a4b;--fail:#b3261e;--warn:#9a6700;--radius:10px;--sidebar:248px;--topbar:60px;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--safe-left:env(safe-area-inset-left,0px);--safe-right:env(safe-area-inset-right,0px)}
+[data-theme=dark]{--bg:#0f141a;--surface:#171e26;--surface-2:#1f2933;--text:#e6edf3;--muted:#9aa8b6;--border:#2c3947;--primary:#4da3ff;--primary-2:#7bbcff}
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden}body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.45}
+button,input,select,textarea{font:inherit;color:inherit}img{max-width:100%}.icon{width:16px;height:16px}.brand-icon{width:34px;height:34px}
+.app-shell{display:flex;height:100vh;height:100dvh;overflow:hidden}.sidebar{width:var(--sidebar);min-width:var(--sidebar);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding-top:var(--safe-top);padding-left:var(--safe-left);z-index:30}.brand{display:flex;gap:10px;align-items:center;padding:16px;border-bottom:1px solid var(--border)}.brand strong{display:block;font-size:15px}.brand span{font-size:12px;color:var(--muted)}
+.nav{flex:1;overflow:auto;padding:10px}.nav button{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border:0;background:transparent;border-radius:8px;cursor:pointer;color:var(--muted);text-align:left;margin-bottom:2px}.nav button.active{background:var(--surface-2);color:var(--primary);font-weight:600}.sidebar-footer{padding:12px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px;padding-bottom:calc(12px + var(--safe-bottom))}.offline-badge{font-size:11px;color:var(--pass)}
+.main{flex:1;display:flex;flex-direction:column;min-width:0}.topbar{min-height:calc(var(--topbar) + var(--safe-top));padding:var(--safe-top) 16px 0;display:flex;align-items:center;gap:12px;background:var(--surface);border-bottom:1px solid var(--border);padding-right:calc(16px + var(--safe-right))}.project-title{flex:1;min-width:0;display:flex;align-items:center;gap:10px}.project-name-input{border:1px solid transparent;background:transparent;font-weight:600;font-size:15px;padding:6px 8px;border-radius:6px;min-width:0;width:100%;max-width:360px}.save-status{font-size:12px;color:var(--muted);white-space:nowrap}.topbar-actions{display:flex;gap:8px;align-items:center}
+.content{flex:1;overflow:auto;padding:20px;padding-bottom:calc(20px + var(--safe-bottom));padding-left:calc(20px + var(--safe-left));padding-right:calc(20px + var(--safe-right))}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid var(--border);background:var(--surface);border-radius:8px;cursor:pointer;white-space:nowrap}.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}.btn.ghost{border-color:transparent;background:transparent}.btn.danger{color:var(--fail);border-color:var(--fail)}
+select,input[type=text],input[type=number],textarea{padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);min-width:0}label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:500}label input,label select{color:var(--text);font-weight:400}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px}.card h2,.card h3{margin:0 0 12px}.grid{display:grid;gap:14px}.grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.flex{display:flex;gap:10px;align-items:center}.wrap{flex-wrap:wrap}.between{justify-content:space-between}.muted{color:var(--muted)}.small{font-size:12px}.empty{padding:40px;text-align:center;color:var(--muted)}
+.table-wrap{overflow:auto;border:1px solid var(--border);border-radius:8px}.data-table{width:100%;border-collapse:collapse;font-size:13px}.data-table th,.data-table td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:left}.data-table th{color:var(--muted);font-size:12px;background:var(--surface-2)}.status{display:inline-flex;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:600}.status.PASS{color:var(--pass);background:#e6f4ec}.status.FAIL{color:var(--fail);background:#fdecea}.status.WARNING{color:var(--warn);background:#fff4d6}.status.INFO{color:var(--primary);background:#e8f1fb}
+.preview-box{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;min-height:280px;overflow:auto}.kpi{display:flex;flex-direction:column;gap:4px}.kpi .value{font-size:24px;font-weight:700}.kpi .label{font-size:12px;color:var(--muted)}.only-mobile{display:none}.boot-loading{padding:40px;text-align:center;color:var(--muted)}.boot-error{margin:12px 20px 0;padding:12px 14px;border:1px solid var(--fail);border-radius:8px;background:#fdecea;color:var(--fail);font-size:13px}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:8px;opacity:0;pointer-events:none;transition:.2s;z-index:100}.toast.show{opacity:1}
+@media(max-width:900px){.sidebar{position:fixed;inset:0 auto 0 0;transform:translateX(-100%);transition:transform .2s}.sidebar.open{transform:translateX(0)}.only-mobile{display:inline-flex}.grid.cols-3,.grid.cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.grid.cols-2,.grid.cols-3,.grid.cols-4{grid-template-columns:1fr}.content{padding:12px}.topbar{flex-wrap:wrap;height:auto;padding-bottom:8px}.topbar-actions{width:100%}.topbar-actions .btn{flex:1;justify-content:center}}
+</style>
+<link rel="stylesheet" href="./src/ui/styles.css?v=20261104-2">
+<script>
+window.__RCDP_BOOTED = false;
+window.__rcdpBootFail = function (msg) {
+  var el = document.getElementById('bootError');
+  if (el) { el.hidden = false; el.textContent = msg || 'The application failed to start. Check the browser console for details.'; }
+};
+setTimeout(function () {
+  if (!window.__RCDP_BOOTED) window.__rcdpBootFail('Startup is taking longer than expected. The shell is visible, but the workspace module may not have loaded. Try a hard refresh (Ctrl/Cmd+Shift+R).');
+}, 8000);
+</script>
+<script defer src="./vendor/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div id="app" class="app-shell">
   <aside class="sidebar" id="sidebar">
-    <div class="brand"><img src="assets/icons/app-icon.svg" alt="" class="brand-icon"><div><strong>RC Column</strong><span>Designer Pro</span></div></div>
-    <nav class="nav" id="nav"></nav>
-    <div class="sidebar-footer"><button id="themeToggle" class="btn ghost"><img src="assets/icons/moon.svg" class="icon" alt=""> Theme</button><span class="offline-badge" id="offlineBadge">Offline-ready</span></div>
+    <div class="brand"><img src="./assets/icons/app-icon.svg" alt="" class="brand-icon"><div><strong>RC Column</strong><span>Designer Pro</span></div></div>
+    <nav class="nav" id="nav" aria-label="Main navigation"></nav>
+    <div class="sidebar-footer"><button id="themeToggle" class="btn ghost" type="button"><img src="./assets/icons/moon.svg" class="icon" alt=""> Theme</button><span class="offline-badge" id="offlineBadge">Offline-ready</span></div>
   </aside>
   <div class="main">
     <header class="topbar">
-      <button id="menuToggle" class="btn ghost only-mobile" aria-label="Menu"><img src="assets/icons/menu.svg" class="icon" alt=""></button>
-      <div class="project-title"><input id="projectName" class="project-name-input" aria-label="Project name"><span id="saveStatus" class="save-status">Saved</span></div>
+      <button id="menuToggle" class="btn ghost only-mobile" type="button" aria-label="Menu"><img src="./assets/icons/menu.svg" class="icon" alt=""></button>
+      <div class="project-title"><input id="projectName" class="project-name-input" aria-label="Project name" placeholder="Project name"><span id="saveStatus" class="save-status">Loading…</span></div>
       <div class="topbar-actions">
         <select id="codeSelect" aria-label="Design code"><option value="ACI318-25">ACI 318-25</option><option value="BS8110-1997">BS 8110-1:1997</option></select>
-        <button id="runDesign" class="btn primary"><img src="assets/icons/play.svg" class="icon" alt=""> Design</button>
-        <button id="saveProject" class="btn"><img src="assets/icons/save.svg" class="icon" alt=""> Save</button>
+        <button id="runDesign" class="btn primary" type="button"><img src="./assets/icons/play.svg" class="icon" alt=""> Design</button>
+        <button id="saveProject" class="btn" type="button"><img src="./assets/icons/save.svg" class="icon" alt=""> Save</button>
       </div>
     </header>
-    <main id="content" class="content" tabindex="-1"></main>
+    <div id="bootError" class="boot-error" role="alert" hidden></div>
+    <main id="content" class="content" tabindex="-1"><div class="boot-loading">Loading workspace…</div></main>
   </div>
 </div>
+<noscript><div class="boot-error">RC Column Designer Pro requires JavaScript. Please enable JavaScript and reload.</div></noscript>
 <div id="toast" class="toast" role="status"></div>
 <input type="file" id="fileInput" hidden accept=".json,.csv">
-<script type="module" src="src/ui/app.js"></script>
+<script type="module" src="./src/ui/app.js?v=20261104-2" onerror="window.__rcdpBootFail('Failed to load the application module (src/ui/app.js). Check that the static server is serving the repository root.')"></script>
 </body>
 </html>

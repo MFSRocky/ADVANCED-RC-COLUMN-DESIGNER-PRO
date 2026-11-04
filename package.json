@@ -10,7 +10,8 @@
   "scripts": {
     "test": "node --test",
     "validate": "node scripts/validate.js",
-    "serve": "node server.mjs"
+    "serve": "node server.mjs",
+    "test:ui": "node scripts/ui-smoke.mjs"
   },
   "repository": {
     "type": "git",
@@ -30,7 +31,9 @@
     "lucide-static": "0.468.0"
   },
   "devDependencies": {
-    "playwright": "1.56.1"
+    "@sparticuz/chromium": "^153.0.0",
+    "playwright": "1.56.1",
+    "puppeteer-core": "^25.16.0"
   },
   "type": "module"
 }

@@ -49,7 +49,12 @@ export function estimateRequiredAs({ code, section, concrete, steel, loads, heig
     }
     return true;
   };
-  let lo = 0.05, hi = 6;
+  const rhoMin = code === 'ACI318-25' ? 0.01 : 0.004;
+  const rhoMax = code === 'ACI318-25' ? 0.08 : 0.06;
+  const rhoNow = section.As / section.Ag;
+  let lo = Math.max(0.02, rhoMin / rhoNow);
+  let hi = Math.min(8, rhoMax / rhoNow);
+  if (hi < lo) return null;
   if (!passes(hi)) return null;
   if (passes(lo)) return section.As * lo;
   for (let i = 0; i < 22; i++) {

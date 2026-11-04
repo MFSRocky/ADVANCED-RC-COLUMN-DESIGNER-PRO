@@ -24,35 +24,70 @@ const state = {
 const $ = sel => document.querySelector(sel);
 const content = $('#content');
 
+function markBooted() {
+  window.__RCDP_BOOTED = true;
+  const el = $('#bootError'); if (el) el.hidden = true;
+}
+function showBootError(msg) {
+  const el = $('#bootError'); if (el) { el.hidden = false; el.textContent = msg; }
+}
+function syncHeader() {
+  const p = state.project; if (!p) return;
+  const name = $('#projectName'); if (name) name.value = p.name ?? '';
+  const code = $('#codeSelect'); if (code) code.value = p.code ?? 'ACI318-25';
+}
+function ensureProject(p) {
+  p.code = p.code ?? 'ACI318-25';
+  p.name = p.name ?? 'Untitled Project';
+  if (!Array.isArray(p.columns) || !p.columns.length) p.columns = [createColumn('C1', p.code)];
+  if (!Array.isArray(p.combinations)) p.combinations = defaultCombinations(p.code);
+  return p;
+}
+function updateStorageBadge() {
+  const st = store.getStorageStatus?.();
+  const badge = $('#offlineBadge'); if (!badge) return;
+  if (st?.mode && st.mode !== 'indexeddb') badge.textContent = 'Local backup mode';
+}
+
 function column() { return state.project?.columns.find(c => c.id === state.columnId) ?? state.project?.columns[0]; }
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2600); }
 function setSaveStatus(s) { $('#saveStatus').textContent = s; }
 
 function applyTheme() {
-  const theme = state.prefs.theme ?? 'system';
-  const dark = theme === 'dark' || (theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
-  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  try {
+    const theme = state.prefs.theme ?? 'system';
+    const dark = theme === 'dark' || (theme === 'system' && typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  } catch { document.documentElement.dataset.theme = 'light'; }
 }
 
 async function loadProjects() { try { state.projects = await store.listProjects(); } catch { state.projects = []; } }
 
-async function openProject(p) {
-  state.project = p;
-  state.columnId = p.columns[0]?.id;
+async function openProject(p, { persist = true } = {}) {
+  state.project = ensureProject(p);
+  state.columnId = state.project.columns[0]?.id;
   state.results.clear(); state.batchResult = null; state.optResult = null;
-  $('#projectName').value = p.name;
-  $('#codeSelect').value = p.code;
-  await store.saveProject(p);
-  await loadProjects();
+  syncHeader();
   render();
+  markBooted();
+  if (persist) { try { await store.saveProject(state.project); } catch (e) { showBootError(`Project could not be saved: ${e.message}`); } }
+  await loadProjects();
+  updateStorageBadge();
+  if (state.activeTab === 'projects') render();
 }
 
 function render() {
-  $('#nav').innerHTML = UI.renderNav(state.activeTab);
-  const s = { ...state, column: column() };
-  const renderers = { projects: UI.renderProjects, column: UI.renderColumn, loads: UI.renderLoads, analysis: UI.renderAnalysis, optimize: UI.renderOptimize, drawings: UI.renderDrawings, batch: UI.renderBatch, report: UI.renderReport, validation: UI.renderValidation, settings: UI.renderSettings, help: UI.renderHelp };
-  content.innerHTML = (renderers[state.activeTab] ?? UI.renderColumn)(s);
-  if (state.activeTab === 'analysis') drawCharts();
+  try {
+    const nav = $('#nav'); if (nav) nav.innerHTML = UI.renderNav(state.activeTab);
+    const s = { ...state, column: column() };
+    const renderers = { projects: UI.renderProjects, column: UI.renderColumn, loads: UI.renderLoads, analysis: UI.renderAnalysis, optimize: UI.renderOptimize, drawings: UI.renderDrawings, batch: UI.renderBatch, report: UI.renderReport, validation: UI.renderValidation, settings: UI.renderSettings, help: UI.renderHelp };
+    content.innerHTML = (renderers[state.activeTab] ?? UI.renderColumn)(s);
+    if (state.activeTab === 'analysis') drawCharts();
+  } catch (e) {
+    console.error(e);
+    content.innerHTML = `<div class="card"><h2>Display error</h2><p class="muted">The workspace could not be rendered: ${String(e?.message ?? e)}</p><button class="btn primary" data-action="new-project">Start a new project</button></div>`;
+    showBootError(`Display error: ${e?.message ?? e}`);
+  }
 }
 
 function drawCharts() {
@@ -70,6 +105,7 @@ function drawCharts() {
 }
 
 function markDirty() {
+  if (!state.project) return;
   setSaveStatus('Saving…');
   store.scheduleAutosave(state.project);
   setTimeout(() => setSaveStatus('Saved'), 1300);
@@ -82,13 +118,13 @@ function setPath(obj, path, value) {
   o[keys[keys.length - 1]] = value;
 }
 
-function runDesign() {
+function runDesign({ silent = false } = {}) {
   const col = column(); if (!col) return;
   try {
     const r = designColumn(col.input, { angles: 72 });
     state.results.set(col.id, r);
-    toast(`Design complete: ${r.status}`);
-  } catch (e) { toast(`Design error: ${e.message}`); console.error(e); }
+    if (!silent) toast(`Design complete: ${r.status}`);
+  } catch (e) { if (!silent) toast(`Design error: ${e.message}`); console.error(e); }
   render();
 }
 
@@ -196,11 +232,11 @@ document.addEventListener('click', e => {
   const tab = e.target.closest('[data-tab]');
   if (tab) { state.activeTab = tab.dataset.tab; $('#sidebar').classList.remove('open'); render(); return; }
   const action = e.target.closest('[data-action]');
-  if (action) { handleAction(action.dataset.action, action); return; }
+  if (action) { Promise.resolve(handleAction(action.dataset.action, action)).catch(err => { console.error(err); toast(`Action failed: ${err.message}`); }); return; }
 });
 document.addEventListener('input', e => {
   const t = e.target; const col = column();
-  if (t.id === 'projectName') { state.project.name = t.value; markDirty(); return; }
+  if (t.id === 'projectName') { if (state.project) state.project.name = t.value; markDirty(); return; }
   if (t.dataset.path && col) {
     let v = t.type === 'checkbox' ? t.checked : t.value;
     if (t.type === 'number') v = v === '' ? undefined : Number(v);
@@ -251,19 +287,43 @@ document.addEventListener('change', e => {
 $('#menuToggle').addEventListener('click', () => $('#sidebar').classList.toggle('open'));
 $('#themeToggle').addEventListener('click', () => { state.prefs.theme = (document.documentElement.dataset.theme === 'dark') ? 'light' : 'dark'; store.setPreferences(state.prefs); applyTheme(); });
 $('#runDesign').addEventListener('click', runDesign);
-$('#saveProject').addEventListener('click', async () => { await store.saveProject(state.project); await loadProjects(); setSaveStatus('Saved'); toast('Project saved'); });
+$('#saveProject').addEventListener('click', async () => {
+  try { await store.saveProject(state.project); await loadProjects(); updateStorageBadge(); setSaveStatus('Saved'); toast('Project saved'); }
+  catch (e) { setSaveStatus('Save failed'); toast(`Save failed: ${e.message}`); }
+});
 window.addEventListener('resize', () => { if (state.activeTab === 'analysis') drawCharts(); });
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme); } catch { }
+window.addEventListener('error', e => { if (!window.__RCDP_BOOTED) showBootError(`Startup error: ${e.message}`); });
+window.addEventListener('unhandledrejection', e => { if (!window.__RCDP_BOOTED) showBootError(`Startup error: ${e.reason?.message ?? e.reason}`); });
+window.addEventListener('rcdp-storage-warning', e => { updateStorageBadge(); toast(e.detail ?? 'Using local backup storage.'); });
 
-// Boot
-(async function init() {
+// Boot: render a usable workspace immediately, then hydrate from storage in the background.
+(function init() {
   applyTheme();
-  await loadProjects();
-  const backup = store.getBackup();
-  if (state.projects.length) await openProject(state.projects[0]);
-  else if (backup?.project) await openProject(backup.project);
-  else await openProject(createDefaultProject());
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
-  window.addEventListener('online', () => $('#offlineBadge').textContent = 'Offline-ready');
-  window.addEventListener('offline', () => $('#offlineBadge').textContent = 'Offline mode');
+  try {
+    state.project = ensureProject(createDefaultProject());
+    state.columnId = state.project.columns[0]?.id;
+    syncHeader();
+    render();
+    markBooted();
+    setSaveStatus('Loading…');
+  } catch (e) {
+    console.error(e);
+    showBootError(`Startup failed: ${e.message}`);
+    return;
+  }
+  (async () => {
+    await loadProjects();
+    const backup = store.getBackup();
+    const existing = state.projects[0] ?? backup?.project;
+    if (existing) await openProject(existing, { persist: false });
+    else { await store.saveProject(state.project); await loadProjects(); }
+    updateStorageBadge();
+    setSaveStatus('Saved');
+    if (state.activeTab === 'projects') render();
+    else if (!state.results.get(column()?.id)) runDesign({ silent: true });
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
+    window.addEventListener('online', () => { $('#offlineBadge').textContent = 'Offline-ready'; });
+    window.addEventListener('offline', () => { $('#offlineBadge').textContent = 'Offline mode'; });
+  })().catch(e => { console.error(e); showBootError(`Storage hydration failed: ${e.message}. The workspace is still usable in memory.`); setSaveStatus('Memory only'); });
 })();
