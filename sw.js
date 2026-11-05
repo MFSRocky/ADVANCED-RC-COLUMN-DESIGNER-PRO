@@ -1,8 +1,8 @@
 /* Offline cache. Version bumped to invalidate stale shells from earlier builds. */
-const CACHE = 'rcdp-v3-20261104-2';
+const CACHE = 'rcdp-v4-20261105';
 const CORE = [
   './', './index.html', './manifest.webmanifest',
-  './src/ui/styles.css?v=20261104-2', './src/ui/app.js?v=20261104-2',
+  './src/ui/styles.css?v=20261105', './src/ui/app.js?v=20261105',
   './src/ui/components.js', './src/ui/charts.js',
   './vendor/jspdf.umd.min.js', './assets/icons/app-icon.svg',
 ];

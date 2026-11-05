@@ -15,6 +15,16 @@ npm run serve      # http://0.0.0.0:8080
 Any static file server works (e.g. `python -m http.server 8080`). ES modules require HTTP(S),
 not `file://`.
 
+## Static production build
+
+```bash
+npm run build        # copies runtime files into dist/
+npm run serve:dist   # verify the built artifact locally
+```
+
+For Vercel, use the included `vercel.json` (Build Command `npm run build`, Output Directory `dist`).
+See [Vercel deployment](vercel.md).
+
 ## Tests
 
 ```bash

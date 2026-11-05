@@ -11,7 +11,9 @@
     "test": "node --test",
     "validate": "node scripts/validate.js",
     "serve": "node server.mjs",
-    "test:ui": "node scripts/ui-smoke.mjs"
+    "test:ui": "node scripts/ui-smoke.mjs",
+    "build": "node scripts/build-static.mjs",
+    "serve:dist": "node server.mjs dist"
   },
   "repository": {
     "type": "git",
