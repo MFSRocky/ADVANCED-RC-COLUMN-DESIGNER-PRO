@@ -27,6 +27,8 @@ slenderness methods and detailing rules are never mixed.
 ```bash
 npm install          # installs jsPDF, Lucide icons, fonts, Playwright (dev)
 npm run serve        # static server on http://0.0.0.0:8080
+npm run build        # build static deployment artifact into dist/
+npm run serve:dist   # serve the built dist/ artifact locally
 npm test             # engineering regression tests
 npm run validate     # benchmark report
 npm run test:ui      # headless browser presentation/boot smoke test (server must be running)
@@ -61,6 +63,7 @@ Internal units are **N, mm, MPa** throughout. Display conversions are validated.
 - [Engineering basis & clause references](docs/engineering-basis.md)
 - [User guide](docs/user-guide.md)
 - [Installation & offline use](docs/installation.md)
+- [Vercel deployment](docs/vercel.md)
 
 ## License
 
